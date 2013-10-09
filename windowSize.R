@@ -11,9 +11,9 @@ library("rugarch")
 
 # Load Historical data ----------------------------------------------------
 
-getSymbols(Symbols="SPX", from="1990-01-01", to="2013-09-20")
+getSymbols(Symbols="SPX", from="1990-01-02", to="2013-09-27")
 spx.level <- SPX[,6]
-spx.return <- dailyReturn(x=spx.level, type='log')
+spx.return <- dailyReturn(x=spx.level)
 # plot(spx.return)
 
 # Window size -------------------------------------------------------------
