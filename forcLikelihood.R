@@ -74,6 +74,8 @@ for(i in 1:20) {
 
 
 # Rolling window calibration ----------------------------------------------
+window.size <- 250 * 5
+
 likelihoods <- vector()
 forcloglikelihoods <- vector()
 
@@ -189,6 +191,10 @@ for (i in 1 : (length(spx.return) - window.size - 20))
 }
 
 # Rolling window calibration, large window, predicting daily ----------------------------------------------
+
+getSymbols(Symbols="SPX", from="1980-01-02", to="2013-09-27")
+spx.level <- SPX[,6]
+spx.return <- dailyReturn(x=spx.level)[2: length(spx.level), ]
 
 window.size <- 250 * 20
 likelihoods <- vector()
