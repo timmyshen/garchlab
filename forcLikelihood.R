@@ -137,6 +137,7 @@ for (i in 1 : (length(spx.return) - window.size - 20))
 window.size <- 250 * 10
 likelihoods <- vector()
 forcloglikelihoods <- vector()
+jumps <- vector()
 
 for (i in 1 : (length(spx.return) - window.size - 20))
 {
@@ -156,9 +157,18 @@ for (i in 1 : (length(spx.return) - window.size - 20))
   return.point <- as.numeric(forcPeriodData[1])
   forcloglikelihood <- forcloglikelihood + dnorm(x=return.point, mean=0, sd=forc.sigma[1], log=TRUE)
   
+  if(abs(return.point) > 3 * forc.sigma[1])
+  {
+    jumps <- c(jumps, TRUE)
+  }
+  else {
+    jumps <- c(jumps, FALSE)
+    
+    forcloglikelihoods <- c(forcloglikelihoods, forcloglikelihood)
+    likelihoods <- c(likelihoods, likelihood(fit))
+    
+  }
   
-  forcloglikelihoods <- c(forcloglikelihoods, forcloglikelihood)
-  likelihoods <- c(likelihoods, likelihood(fit))
 }
 
 # Rolling window calibration, small window, predicting daily ----------------------------------------------
@@ -166,6 +176,7 @@ for (i in 1 : (length(spx.return) - window.size - 20))
 window.size <- 250 * 5
 likelihoods <- vector()
 forcloglikelihoods <- vector()
+jumps <- vector()
 
 for (i in 1 : (length(spx.return) - window.size - 20))
 {
@@ -186,8 +197,17 @@ for (i in 1 : (length(spx.return) - window.size - 20))
   forcloglikelihood <- forcloglikelihood + dnorm(x=return.point, mean=0, sd=forc.sigma[1], log=TRUE)
   
   
-  forcloglikelihoods <- c(forcloglikelihoods, forcloglikelihood)
-  likelihoods <- c(likelihoods, likelihood(fit))
+  if(abs(return.point) > 3 * forc.sigma[1])
+  {
+    jumps <- c(jumps, TRUE)
+  }
+  else {
+    jumps <- c(jumps, FALSE)
+    
+    forcloglikelihoods <- c(forcloglikelihoods, forcloglikelihood)
+    likelihoods <- c(likelihoods, likelihood(fit))
+    
+  }
 }
 
 # Rolling window calibration, large window, predicting daily ----------------------------------------------
@@ -199,6 +219,7 @@ spx.return <- dailyReturn(x=spx.level)[2: length(spx.level), ]
 window.size <- 250 * 20
 likelihoods <- vector()
 forcloglikelihoods <- vector()
+jumps <- vector()
 
 for (i in 1 : (length(spx.return) - window.size - 20))
 {
@@ -219,8 +240,17 @@ for (i in 1 : (length(spx.return) - window.size - 20))
   forcloglikelihood <- forcloglikelihood + dnorm(x=return.point, mean=0, sd=forc.sigma[1], log=TRUE)
   
   
-  forcloglikelihoods <- c(forcloglikelihoods, forcloglikelihood)
-  likelihoods <- c(likelihoods, likelihood(fit))
+  if(abs(return.point) > 3 * forc.sigma[1])
+  {
+    jumps <- c(jumps, TRUE)
+  }
+  else {
+    jumps <- c(jumps, FALSE)
+    
+    forcloglikelihoods <- c(forcloglikelihoods, forcloglikelihood)
+    likelihoods <- c(likelihoods, likelihood(fit))
+    
+  }
 }
 
 # Rolling window calibration, 15y window, predicting daily ----------------------------------------------
@@ -247,7 +277,16 @@ for (i in 1 : (length(spx.return) - window.size - 20))
   return.point <- as.numeric(forcPeriodData[1])
   forcloglikelihood <- forcloglikelihood + dnorm(x=return.point, mean=0, sd=forc.sigma[1], log=TRUE)
   
+  if(abs(return.point) > 3 * forc.sigma[1])
+  {
+    jumps <- c(jumps, TRUE)
+  }
+  else {
+    jumps <- c(jumps, FALSE)
+    
+    forcloglikelihoods <- c(forcloglikelihoods, forcloglikelihood)
+    likelihoods <- c(likelihoods, likelihood(fit))
+    
+  }
   
-  forcloglikelihoods <- c(forcloglikelihoods, forcloglikelihood)
-  likelihoods <- c(likelihoods, likelihood(fit))
 }
