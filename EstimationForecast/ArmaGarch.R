@@ -102,3 +102,40 @@ sigma(modelfor00)[3]
 
 # quantile(x=modelfor00, 0.05)
 
+
+# 6. Rolling forecast with reestimation -----------------------------------
+
+# model <- ugarchspec(variance.model=list(model = "sGARCH", garchOrder = c(1, 1)),
+#                     mean.model=list(armaOrder = c(1, 1)),
+#                     distribution.model="norm")
+
+modelroll <- ugarchroll(spec=model, data=sp500ret, n.ahead=1,
+                        forecast.length=100, n.start=NULL,
+                        refit.every=50, refit.window=c("recersive"),
+                        calculate.VaR=TRUE, VaR.alpha=c(0.01, 0.05),
+                        keep.coef=TRUE)
+
+# str(modelroll@forecast)
+
+VaR.roll <- modelroll@forecast$VaR[, "alpha(1%)"]
+return.roll <- modelroll@forecast$VaR[, "realized"]
+Hit <- return.roll < VaR.roll
+# sum(Hit)
+
+q_st <- qnorm(0.025)
+sigma <- modelroll@forecast$density[, "Sigma"]
+mu <- modelroll@forecast$density[, "Mu"]
+Var.0025 <- q_st * sigma + mu
+
+model.sstd <- ugarchspec(variance.model=list(model = "sGARCH", garchOrder = c(1, 1)),
+                    mean.model=list(armaOrder = c(1, 1)),
+                    distribution.model="sstd")
+
+modelroll.sstd <- ugarchroll(spec=model, data=sp500ret, n.ahead=1,
+                        forecast.length=100, n.start=NULL,
+                        refit.every=50, refit.window=c("recersive"),
+                        calculate.VaR=TRUE, VaR.alpha=c(0.01, 0.05),
+                        keep.coef=TRUE)
+
+skew.estimate <- modelroll.sstd@forecast$density[, "Skew"]
+
