@@ -111,7 +111,7 @@ sigma(modelfor00)[3]
 
 modelroll <- ugarchroll(spec=model, data=sp500ret, n.ahead=1,
                         forecast.length=100, n.start=NULL,
-                        refit.every=50, refit.window=c("recersive"),
+                        refit.every=50, refit.window=c("recursive"),
                         calculate.VaR=TRUE, VaR.alpha=c(0.01, 0.05),
                         keep.coef=TRUE)
 
@@ -133,7 +133,7 @@ model.sstd <- ugarchspec(variance.model=list(model = "sGARCH", garchOrder = c(1,
 
 modelroll.sstd <- ugarchroll(spec=model, data=sp500ret, n.ahead=1,
                         forecast.length=100, n.start=NULL,
-                        refit.every=50, refit.window=c("recersive"),
+                        refit.every=50, refit.window=c("recursive"),
                         calculate.VaR=TRUE, VaR.alpha=c(0.01, 0.05),
                         keep.coef=TRUE)
 
